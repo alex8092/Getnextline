@@ -76,11 +76,8 @@ static int		ft_final(t_nexl **nl, t_fd *fd, char **line, ssize_t ret)
 	{
 		(*nl)->save = fd->tab->joinall(fd->tab);
 		if (ft_strlen((*nl)->save) > 0)
-		{
-			(*line) = (*nl)->save;
-			fd->tab->free(&fd->tab, true);
-			return (1);
-		}
+			return ((((*line) = (*nl)->save)) ? 1 : 1);
+		fd->tab->free(&fd->tab, true);
 		ft_strdel(&(*nl)->save);
 	}
 	current = (*nl)->begin;
@@ -92,7 +89,10 @@ static int		ft_final(t_nexl **nl, t_fd *fd, char **line, ssize_t ret)
 		current->next = current->next->next;
 	free(fd);
 	if (!(*nl)->begin)
+	{
+		free((*nl)->buff);
 		ft_memdel((void **)nl);
+	}
 	return (ret);
 }
 

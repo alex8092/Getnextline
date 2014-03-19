@@ -14,12 +14,17 @@ endif
 
 LDFLAGS_TEST = -L$(FTDIR)/lib -lftastr -lftcommon -Wl,-rpath,$(FTDIR)/lib
 
-LDFLAGS = -shared $(LDFLAGS_TEST)
-
+OS = $(shell uname -s)
+ifeq ($(OS),Darwin)
+	SHORTNAME = libftgetnextline.dylib
+	LDFLAGS = -dynamiclib $(LDFLAGS_TEST) -install_name @rpath/$(SHORTNAME)
+else
+	SHORTNAME = libftgetnextline.so
+	LDFLAGS = -shared $(LDFLAGS_TEST)
+endif
 LD_LIBRARY_PATH=$(FTDIR)/lib:$(LD_LIBRARY_PATH)
 
 NAME = $(LIBDIR)/$(SHORTNAME)
-SHORTNAME = libftgetnextline.so
 
 SRCS =	ft_getnextline.c \
 
